@@ -5,11 +5,12 @@ const UPDATE_PATH = "@@router/UPDATE_PATH";
 
 // Action creator
 
-function updatePath(path, noRouterUpdate) {
+function updatePath(path, noRouterUpdate, replace) {
   return {
     type: UPDATE_PATH,
     path: path,
-    noRouterUpdate: noRouterUpdate
+    noRouterUpdate: noRouterUpdate,
+    replace: replace
   }
 }
 
@@ -23,7 +24,8 @@ function update(state=initialState, action) {
   if(action.type === UPDATE_PATH) {
     return Object.assign({}, state, {
       path: action.path,
-      noRouterUpdate: action.noRouterUpdate
+      noRouterUpdate: action.noRouterUpdate,
+      replace: action.replace
     });
   }
   return state;
@@ -56,10 +58,15 @@ function syncReduxAndRouter(history, store) {
     // Don't update the router if nothing has changed. The
     // `noRouterUpdate` flag can be set to avoid updating altogether,
     // which is useful for things like loading snapshots or very special
-    // edge cases.
+    // edge cases. The `replace` flag can be set to use `replaceState`
+    // instead of `pushState` to update the history.
     if(routing.path !== locationToString(window.location) &&
        !routing.noRouterUpdate) {
-      history.pushState(null, routing.path);
+      if(routing.replace) {
+        history.replaceState(null, routing.path);
+      } else {
+        history.pushState(null, routing.path);
+      }
     }
   });
 }

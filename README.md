@@ -135,7 +135,7 @@ piece of state must be named `routing`**
 
 An action type that you can listen for in your reducers.
 
-### `updatePath(path, noRouterUpdate)`
+### `updatePath(path, noRouterUpdate, replace)`
 
 An action creator that you can use to update the current URL. Just
 pass it a string like `/foo/bar?param=5`.
@@ -145,3 +145,6 @@ to this and all future URL changes. Pass `false` to make it start
 reacting again. This is useful if replaying snapshots while using the
 `forceRefresh` option of the browser history which forces full
 reloads. It's a rare edge case.
+
+The `replace` flag can be set to trigger a `replaceState` instead of a
+`pushState`.
